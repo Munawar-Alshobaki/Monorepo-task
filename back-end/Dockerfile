@@ -18,8 +18,8 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --locked --no-dev
 
 COPY alembic.ini ./
-COPY migrations ./migrations
 COPY app ./app
+COPY seed ./seed
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 

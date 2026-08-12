@@ -35,7 +35,7 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
     volumes:
       - ./back-end/app:/app/app
-      - ./back-end/migrations:/app/migrations
+      - ./back-end/seed:/app/seed
       - ./back-end/alembic.ini:/app/alembic.ini
     depends_on:
       db:

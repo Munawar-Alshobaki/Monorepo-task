@@ -31,15 +31,16 @@ inserts a few demo users if the table is empty, and then starts uvicorn.
 │   ├── pyproject.toml        # dependencies, locked in uv.lock
 │   ├── docker-entrypoint.sh  # wait for db -> migrate -> seed -> serve
 │   ├── alembic.ini
-│   ├── migrations/
-│   │   ├── env.py            # reads DATABASE_URL, targets Base.metadata
-│   │   └── versions/         # auto-generated migrations
+│   ├── seed/
+│   │   └── seed.py           # idempotent demo data
 │   └── app/
 │       ├── db.py             # engine, session factory, get_db dependency
 │       ├── model.py          # User ORM model
 │       ├── schema.py         # Pydantic request/response schemas
 │       ├── main.py           # endpoints, lifespan, logging, error handling
-│       └── seed.py           # idempotent demo data
+│       └── migrations/
+│           ├── env.py        # reads DATABASE_URL, targets Base.metadata
+│           └── versions/     # auto-generated migrations
 └── front-end/
     ├── Dockerfile            # vite build -> nginx
     ├── nginx.conf            # serves the SPA, proxies /api to the backend
@@ -95,7 +96,7 @@ Alembic migrations are auto-generated. After changing `app/model.py`:
 
 ```bash
 docker compose run --rm \
-  --volume "$PWD/back-end/migrations/versions:/app/migrations/versions" \
+  --volume "$PWD/back-end/app/migrations/versions:/app/app/migrations/versions" \
   --entrypoint alembic backend revision --autogenerate -m "describe the change"
 ```
 

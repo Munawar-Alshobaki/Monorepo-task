@@ -29,7 +29,7 @@ echo "[entrypoint] applying alembic migrations"
 alembic upgrade head
 
 echo "[entrypoint] seeding demo data"
-python -m app.seed
+python -m seed.seed
 
 echo "[entrypoint] starting: $*"
 exec "$@"
