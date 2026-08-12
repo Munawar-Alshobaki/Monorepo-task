@@ -1,9 +1,8 @@
 import logging
 
-from sqlalchemy import func, select
-
 from app.db import SessionLocal
-from app.model import User
+from app.repository import UserRepository
+from app.schema import UserCreate
 
 logger = logging.getLogger("app.seed")
 
@@ -17,11 +16,11 @@ USERS = [
 
 def seed() -> None:
     with SessionLocal() as session:
-        existing = session.scalar(select(func.count()).select_from(User)) or 0
-        if existing:
+        users = UserRepository(session)
+        if users.count():
             return
-        session.add_all(User(**row) for row in USERS)
-        session.commit()
+        for row in USERS:
+            users.create(UserCreate(**row))
         logger.info("users created")
 
 if __name__ == "__main__":

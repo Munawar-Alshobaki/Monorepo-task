@@ -7,12 +7,13 @@ from contextlib import asynccontextmanager
 from fastapi import APIRouter, Depends, FastAPI, Query, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from sqlalchemy import select, text
+from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.db import engine, get_db
 from app.model import User
+from app.repository import UserRepository
 from app.schema import UserRead
 
 logging.basicConfig(level=logging.INFO)
@@ -72,19 +73,17 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
     )
 
 
+def get_user_repository(db: Session = Depends(get_db)) -> UserRepository:
+    return UserRepository(db)
+
+
 @router.get("/users", response_model=list[UserRead])
 def list_users(
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
-    db: Session = Depends(get_db),
+    users: UserRepository = Depends(get_user_repository),
 ) -> list[User]:
-    users = db.scalars(
-        select(User)
-        .order_by(User.created_at.desc(), User.id.desc())
-        .limit(limit)
-        .offset(offset)
-    ).all()
-    return list(users)
+    return users.list(limit=limit, offset=offset)
 
 
 app.include_router(router)

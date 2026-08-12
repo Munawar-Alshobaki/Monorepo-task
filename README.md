@@ -36,6 +36,7 @@ inserts a few demo users if the table is empty, and then starts uvicorn.
 │   └── app/
 │       ├── db.py             # engine, session factory, get_db dependency
 │       ├── model.py          # User ORM model
+│       ├── repository.py     # UserRepository, the only place users is queried
 │       ├── schema.py         # Pydantic request/response schemas
 │       ├── main.py           # endpoints, lifespan, logging, error handling
 │       └── migrations/
