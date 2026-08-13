@@ -1,4 +1,4 @@
-# Monorepo Task
+#  Task
 
 FastAPI + Postgres backend and a React/TypeScript frontend, wired together so the
 whole stack comes up with one command.
@@ -42,9 +42,9 @@ inserts a few demo users if the table is empty, and then starts uvicorn.
 │           ├── env.py            # reads DATABASE_URL, targets Base.metadata
 │           └── versions/         # auto-generated migrations
 └── front-end/
-    ├── Dockerfile                # vite build -> nginx
-    ├── nginx.conf                # serves the SPA, proxies /api to the backend
-    ├── vite.config.ts            # dev server proxies /api to localhost:8000
+    ├── Dockerfile                # multi-stage: `build` (dev server) -> nginx
+    ├── nginx.conf                # production stage: serves the SPA, proxies /api
+    ├── vite.config.ts            # dev server + /api proxy (VITE_PROXY_TARGET)
     └── src/
         ├── main.tsx              # QueryClientProvider + RouterProvider
         ├── index.css             # global styles
