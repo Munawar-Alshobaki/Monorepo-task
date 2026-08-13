@@ -1,4 +1,4 @@
-# Monorepo Task
+#  Task
 
 FastAPI + Postgres backend and a React/TypeScript frontend, wired together so the
 whole stack comes up with one command.
